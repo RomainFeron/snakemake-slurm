@@ -1,0 +1,5 @@
+threads: --cpus-per-task={}
+memory: --mem={}
+log: --output={}.cluster.o --error={}.cluster.e
+runtime: --time={}
+queue: --partition={}

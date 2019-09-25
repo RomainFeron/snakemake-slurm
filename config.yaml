@@ -1,0 +1,2 @@
+cluster: "submit.py"
+jobs: 100
