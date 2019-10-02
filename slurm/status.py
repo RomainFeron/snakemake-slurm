@@ -41,7 +41,7 @@ status_table = {'BOOT_FAIL': failed,
                 'TIMEOUT': failed}
 
 # Recover job ID from CL arguments
-job_id = sys.argv[1]
+job_id = int(sys.argv[1])
 
 # Generate status checking command from job ID
 cmd = f'sacct -nbPj {job_id}'

@@ -1,6 +1,14 @@
-cluster: "submit.py"
-cluster-status: "status.py"
+# Default values for snakemake runtime arguments
+
+# Maximum number of jobs to submit concurrently
 jobs: 100
-max-jobs-per-second: 1
-max-status-checks-per-second: 10
+# Number of cores used by local snakemake rules
 local-cores: 1
+# Maximum number of jobs to submit per second
+max-jobs-per-second: 5
+# Maximum number of job status checks per second
+max-status-checks-per-second: 10
+# Cluster submission script
+cluster: "submit.py"
+# Cluster job status script
+cluster-status: "status.py"
