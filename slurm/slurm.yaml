@@ -1,7 +1,5 @@
 # Partitions to remove from submit list
 blacklist:
-    - ax-long
-    - ax-normal
 
 # Syntax for slurm submission options
 options:

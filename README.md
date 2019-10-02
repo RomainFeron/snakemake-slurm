@@ -1,6 +1,6 @@
 # Snakemake profile for Slurm schedulers
 
-This profile is heavily inspired from the Slurm profile in Snakemake's official profiles [repository](https://github.com/Snakemake-Profiles/slurm). This profile is great, but I was not entirely happy with some of its features. That's why I've implemented this SLURM profile with the following features:
+This profile is heavily inspired from the Slurm profile in Snakemake's official profiles [repository](https://github.com/Snakemake-Profiles/slurm). This profile is great, but it is missing some features and documentation. The present Snakemake profile was developed to address these points and implements the following features:
 - No cookiecutter dependency
 - Comprehensive documentation making the profile easy to use
 - "Smart" handling of partitions
@@ -20,7 +20,7 @@ By default, the profile will be installed to `~/.config/snakemake/slurm`. You ca
 
 ### Using the profile
 
-To use this profile when running snakemake, use the Snakemake runtime parameter `--profile slurm` (replace `slurm` with `<profile_name>` if you installed the profile under a different name). For more information on using Snakemake profile, check the [official Snakemake documentation](https://snakemake.readthedocs.io/en/latest/executable.html#profiles).
+To run Snakemake with this profile, use the runtime parameter `--profile slurm` (replace `slurm` with `<profile_name>` if you installed the profile under a different name): `snakemake --profile slurm`. For more information on Snakemake profiles, check the [official Snakemake documentation](https://snakemake.readthedocs.io/en/latest/executable.html#profiles).
 
 ### Specifying parameter values
 
@@ -45,7 +45,7 @@ rule example:
     resources:
         memory: 16000
     shell:
-    'echo "example" > example.txt'
+    'echo "example" > {output}'
 ```
 
 **Note :** it is advised to specify memory with the `resources` keyword, as it allows Snakemake to resubmit the job with higher memory requirements in case of failure.
@@ -55,9 +55,14 @@ You can implement additional parameters by adding an entry to the `options` fiel
 options:
     <option_name>: <slurm flag>={}
 ```
-In this case, `<option_name>` should match the name of the Snakemake rule option, and `<slurm_flag>` is the flag used to specify this option with the `sbatch` command. The `{}` will be substituted by the option's value if it has been specified in the Snakemake rule.
+In this case, `<option_name>` should match the name of the Snakemake rule option, and `<slurm_flag>` is the flag used to specify this option with the `sbatch` command. The `{}` will be substituted for the option's value if the value was specified in the Snakemake rule.
 
-In the Snakemake rule, options can be specified either at the rule's level (*e.g.* threads), within the `params` keyword, or within the `resources` keyword. The profile will first look for the option in `resources`, then `params`, then at the rule's level.
+In the Snakemake rule, option values can be specified 
+- at the rule level (*e.g.* threads)
+- within the `params` keyword
+- within the `resources` keyword. 
+
+The profile will first look for the option in `resources`, then `params`, then at the rule level.
 
 ### Blacklisting partitions
 
