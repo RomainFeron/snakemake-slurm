@@ -7,6 +7,8 @@ This profile is heavily inspired from the Slurm profile in Snakemake's official 
 - Customability through YAML files
 - "Clean" implementation to allow adding new features efficiently
 
+**This is a work in progress. Feature requests, issues, and pull requests welcome !**
+
 ## Installation
 
 ```bash
