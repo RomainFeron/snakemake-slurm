@@ -11,6 +11,22 @@ This profile is heavily inspired from the Slurm profile in Snakemake's official 
 
 ## Installation
 
+#### Requirements
+
+To function properly, this profile requires the following python modules:
+
+- `pyyaml`
+- `snakemake`
+
+Both modules are available in PyPi and can be installed with pip. To install these modules in a user environment (*e.g.* on a cluster), run:
+
+```bash
+pip install --user pyyaml
+pip install --user snakemake
+```
+
+#### Installing the profile
+
 ```bash
 git clone https://github.com/RomainFeron/snakemake-slurm.git
 ./INSTALL
