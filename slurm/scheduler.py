@@ -120,13 +120,13 @@ class SlurmScheduler:
         '''
         Check if a given setting is present in the job's parameters
         '''
-        return self.job_properties['params'][param] if param in self.job_properties['params'] else None
+        return self.job_properties['params'][param] if 'params' in self.job_properties and param in self.job_properties['params'] else None
 
     def check_for_resource(self, resource):
         '''
         Check if a given setting is present in the job's resources
         '''
-        return self.job_properties['resources'][resource] if resource in self.job_properties['resources'] else None
+        return self.job_properties['resources'][resource] if 'resources' in self.job_properties and if resource in self.job_properties['resources'] else None
 
     def get_submission_settings(self):
         '''
