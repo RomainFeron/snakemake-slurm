@@ -126,7 +126,7 @@ class SlurmScheduler:
         '''
         Check if a given setting is present in the job's resources
         '''
-        return self.job_properties['resources'][resource] if 'resources' in self.job_properties and if resource in self.job_properties['resources'] else None
+        return self.job_properties['resources'][resource] if 'resources' in self.job_properties and resource in self.job_properties['resources'] else None
 
     def get_submission_settings(self):
         '''
