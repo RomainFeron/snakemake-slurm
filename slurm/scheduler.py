@@ -161,11 +161,11 @@ class SlurmScheduler:
                 suitable = True
                 if data['AVAIL'] != 'up':
                     suitable = False
-                elif self.submission_settings['threads'] and self.submission_settings['threads'] > data['CPUS']:
+                elif self.submission_settings['threads'] and int(self.submission_settings['threads']) > int(data['CPUS']):
                     suitable = False
-                elif self.submission_settings['memory'] and self.submission_settings['memory'] > data['MEMORY']:
+                elif self.submission_settings['memory'] and int(self.submission_settings['memory']) > int(data['MEMORY']):
                     suitable = False
-                elif self.submission_settings['runtime'] and convert_time(self.submission_settings['runtime']) > data['TIMELIMIT']:
+                elif self.submission_settings['runtime'] and convert_time(self.submission_settings['runtime']) > int(data['TIMELIMIT']):
                     suitable = False
                 if suitable:
                     self.submission_settings['partition'] = partition
