@@ -35,6 +35,16 @@ git clone https://github.com/RomainFeron/snakemake-slurm.git
 By default, the profile will be installed to `~/.config/snakemake/slurm`. You can specify a different name for the profile by running `./INSTALL <profile_name>`; then, the profile will be installed in `~/.config/snakemake/<profile_name>`.
 
 
+#### Updating the profile
+
+```bash
+git clone https://github.com/RomainFeron/snakemake-slurm.git
+./UPDATE
+```
+
+Updating the profile will update the profile's code but not the configuration (yaml) files, so that your configuration is saved. If you installed the profile in a specific directory `<profile_name>`, run the command `./UPDATE <profile_name>` instead.
+
+
 #### Special notes for UNIL HPC users (wally / axiom)
 
 Since this profile is mainly used by users of the UNIL HPC wally/axiom, I thought I'd share my configuration for this platform. I setup two separate profiles for wally and axiom with the following commands:
