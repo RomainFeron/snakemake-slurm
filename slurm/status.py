@@ -4,7 +4,7 @@ import subprocess
 import logging
 
 # Max number of attempts
-MAX_ATTEMPTS = 25
+MAX_ATTEMPTS = 50
 
 # Define string constants for statuses
 failed = 'failed'
@@ -12,7 +12,12 @@ success = 'success'
 running = 'running'
 
 # Setup logger (check if this is needed)
-logger = logging.getLogger('__name__')
+# logger = logging.getLogger('__name__')
+
+# Setup logging
+logging.basicConfig(level=logging.INFO,
+                    format='[slurm-status]::[%(asctime)s]::%(levelname)s  %(message)s',
+                    datefmt='%Y.%m.%d - %H:%M:%S')
 
 # Dictionary giving the snakemake state for a job for each SLURM status
 status_table = {'BOOT_FAIL': failed,
