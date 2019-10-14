@@ -34,6 +34,38 @@ git clone https://github.com/RomainFeron/snakemake-slurm.git
 
 By default, the profile will be installed to `~/.config/snakemake/slurm`. You can specify a different name for the profile by running `./INSTALL <profile_name>`; then, the profile will be installed in `~/.config/snakemake/<profile_name>`.
 
+
+#### Special notes for UNIL HPC users (wally / axiom)
+
+Since this profile is mainly used by users of the UNIL HPC wally/axiom, I thought I'd share my configuration for this platform. I setup two separate profiles for wally and axiom with the following commands:
+
+```bash
+./INSTALL wally
+./INSTALL axiom
+```
+
+I then edited the file `slurm.yaml` for each profile to blacklist partitions from the other cluster:
+
+- **Wally**:
+
+```yaml
+blacklist:
+    - ax-normal
+    - ax-long
+```
+
+- **Axiom**:
+
+```yaml
+blacklist:
+    - normal
+    - long
+```
+
+This way, I can run Snakemake on axiom (if the data is on /scratch/axiom) with `--profile axiom`, and on wally (if the data is on /scratch/wally) with `--profile wally`.
+
+**Note**: you should install Miniconda in your home, which can be accessed from both axiom and wally nodes. It could cause storage problems if you're using a lot of tools but there is no other solution at the moment, except duplicating your Miniconda install on both /scratch/axiom and /scratch/wally.
+
 ## Usage
 
 ### Using the profile
