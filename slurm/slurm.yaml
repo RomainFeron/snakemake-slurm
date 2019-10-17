@@ -5,6 +5,7 @@ blacklist:
 options:
     threads: --cpus-per-task={}
     memory: --mem={}
+    mem_mb: --mem={}
     log: --output={}.cluster.o --error={}.cluster.e
     runtime: --time={}
     partition: --partition={}
