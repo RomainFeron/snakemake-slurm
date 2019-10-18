@@ -59,16 +59,16 @@ for attempt in range(MAX_ATTEMPTS):
         status = status_string.decode('utf-8').split('|')[1]  # Response is "ID|STATUS|EXIT CODE"
         break  # Command was successful
     except subprocess.CalledProcessError as error:
-        logger.error(f'Failed status checking attempt {attempt}/{MAX_ATTEMPTS}: <{error}>')
+        logging.error(f'Failed status checking attempt {attempt}/{MAX_ATTEMPTS}: <{error}>')
     except IndexError as error:
         # Split failed, meaning the response was not following the expected format
         # This happens for instance if the job id does not exist
-        logger.error(f'Unexpected response in checking attempt {attempt}/{MAX_ATTEMPTS}: <{status_string.decode("utf-8")}>')
+        logging.error(f'Unexpected response in checking attempt {attempt}/{MAX_ATTEMPTS}: <{status_string.decode("utf-8")}>')
         pass
 
 # Prints the corresponding snakemake status
 if status not in status_table:
-    logger.error(f'Unknown status: <{status}>')
+    logging.error(f'Unknown status: <{status}>')
     print('failed')  # If something unexpected happened, the job is marked as failed by default
 else:
     print(status_table[status])
