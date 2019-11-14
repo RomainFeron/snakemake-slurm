@@ -29,7 +29,7 @@ class SlurmScheduler:
     def __init__(self):
         self.cfg = {}
         self.partitions_info = {}
-        self.submission_settings = {'threads': None, 'memory': None, 'log': None, 'runtime': None, 'partition': None}
+        self.submission_settings = defaultdict(lambda: None)
         self.command = ''
         self.partitions_file = ''
         self.jobscript = sys.argv[1]
@@ -164,6 +164,8 @@ class SlurmScheduler:
                 elif self.submission_settings['threads'] and int(self.submission_settings['threads']) > int(data['CPUS']):
                     suitable = False
                 elif self.submission_settings['memory'] and int(self.submission_settings['memory']) > int(data['MEMORY']):
+                    suitable = False
+                elif self.submission_settings['mem_mb'] and int(self.submission_settings['mem_mb']) > int(data['MEMORY']):
                     suitable = False
                 elif self.submission_settings['runtime'] and convert_time(self.submission_settings['runtime']) > int(data['TIMELIMIT']):
                     suitable = False
