@@ -13,8 +13,13 @@ def convert_time(time):
     '''
     Utility function to convert a runtime from format 'D-HH:MM:SS' to seconds
     '''
-    d, h, m, s = (int(f) for f in re.split(':|-', time))
-    return ((((d * 24) + h) * 60) + m) * 60 + s
+    if isistance(time, int):
+        return time
+    elif time.isdigit():
+        return int(time)
+    else:
+        d, h, m, s = (int(f) for f in re.split(':|-', time))
+        return ((((d * 24) + h) * 60) + m) * 60 + s
 
 
 def output(cmd):
