@@ -90,7 +90,7 @@ The profile will check Snakemake's jobscript for all parameters defined in the `
 |---|---|---|
 | threads | Number of CPUs to request at submission | `threads` |
 | memory | Maximum memory to request at submission (**in Mb**) | `resources: mem_mb`<br>`resources: memory`<br>`params: mem_mb`<br>`params: memory`|
-| runtime | Maximum runtime to request at submission (**format: "D-HH:MM:SS"**) | `params: runtime`|
+| runtime | Maximum runtime to request at submission (**format: "D-HH:MM:SS" or "\<seconds\>"**) | `params: runtime`|
 | log | Path to log file | `log` |
 | partition | Partition to submit the job to | `params: partition`|
 
