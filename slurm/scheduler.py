@@ -13,7 +13,7 @@ def convert_time(time):
     '''
     Utility function to convert a runtime from format 'D-HH:MM:SS' to seconds
     '''
-    if isistance(time, int):
+    if isinstance(time, int):
         return time
     elif time.isdigit():
         return int(time)
