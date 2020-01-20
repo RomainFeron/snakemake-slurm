@@ -22,6 +22,26 @@ def convert_time(time):
         return ((((d * 24) + h) * 60) + m) * 60 + s
 
 
+def convert_time_slurm(time):
+    '''
+    Utility function to convert a runtime from seconds to format 'D-HH:MM:SS'
+    '''
+    d = time // 24
+    time = time - 24 * d
+    h = time // 60
+    if h < 10:
+        h = f'0{h}'
+    time = time - 60 * h
+    m = time // 60
+    if m < 10:
+        m = f'0{m}'
+    time = time - 60 * m
+    s = time
+    if s < 10:
+        s = f'0{s}'
+    return f'{d}-{h}:{m}:{s}'
+
+
 def output(cmd):
     '''
     Wrapper around subprocess.check_output that returns the output in utf-8 format
@@ -188,6 +208,7 @@ class SlurmScheduler:
         '''
         Generate the submission command based on submission settings.
         '''
+        self.submission_settings['runtime'] = convert_time_slurm(self.submission_settings['runtime'])
         self.command = 'sbatch '
         for setting, arg_string in self.cfg['options'].items():
             if self.submission_settings[setting] is not None:
