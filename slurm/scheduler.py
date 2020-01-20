@@ -26,17 +26,18 @@ def convert_time_slurm(time):
     '''
     Utility function to convert a runtime from seconds to format 'D-HH:MM:SS'
     '''
-    d = time // 24
-    time = time - 24 * d
-    h = time // 60
-    time = time - 60 * h
+    d, h, m, s = (0, 0, 0, 0)
+    s = time % 60
+    time = (time - s) // 60
+    m = time % 60
+    time = (time - m) // 60
+    h = time % 24
+    time = (time - h) // 24
+    d = time
     if h < 10:
         h = f'0{h}'
-    m = time // 60
-    time = time - 60 * m
     if m < 10:
         m = f'0{m}'
-    s = time
     if s < 10:
         s = f'0{s}'
     return f'{d}-{h}:{m}:{s}'
