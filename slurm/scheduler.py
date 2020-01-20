@@ -29,13 +29,13 @@ def convert_time_slurm(time):
     d = time // 24
     time = time - 24 * d
     h = time // 60
+    time = time - 60 * h
     if h < 10:
         h = f'0{h}'
-    time = time - 60 * h
     m = time // 60
+    time = time - 60 * m
     if m < 10:
         m = f'0{m}'
-    time = time - 60 * m
     s = time
     if s < 10:
         s = f'0{s}'
