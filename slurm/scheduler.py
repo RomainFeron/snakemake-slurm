@@ -152,6 +152,7 @@ class SlurmScheduler:
                     if not os.path.isdir(dir_path):
                         os.makedirs(dir_path)
                 self.submission_settings[setting] = value
+        self.submission_settings['runtime'] = convert_time(self.submission_settings['runtime'])
 
     def set_partition(self):
         '''
@@ -172,7 +173,7 @@ class SlurmScheduler:
                     suitable = False
                 elif self.submission_settings['mem_mb'] and int(self.submission_settings['mem_mb']) > int(data['MEMORY']):
                     suitable = False
-                elif self.submission_settings['runtime'] and convert_time(self.submission_settings['runtime']) > int(data['TIMELIMIT']):
+                elif self.submission_settings['runtime'] and self.submission_settings['runtime'] > int(data['TIMELIMIT']):
                     suitable = False
                 if suitable:
                     self.submission_settings['partition'] = partition
