@@ -29,6 +29,7 @@ pip install --user snakemake
 
 ```bash
 git clone https://github.com/RomainFeron/snakemake-slurm.git
+cd snakemake-slurm
 ./INSTALL
 ```
 
@@ -38,7 +39,7 @@ By default, the profile will be installed to `~/.config/snakemake/slurm`. You ca
 #### Updating the profile
 
 ```bash
-git clone https://github.com/RomainFeron/snakemake-slurm.git
+# From within the snakemake-slurm directory (not the directory where the profile was installed)
 ./UPDATE
 ```
 
@@ -50,6 +51,7 @@ Updating the profile will update the profile's code but not the configuration (y
 Since this profile is mainly used by users of the UNIL HPC wally/axiom, I thought I'd share my configuration for this platform. I setup two separate profiles for wally and axiom with the following commands:
 
 ```bash
+# From within the snakemake-slurm directory (not the directory where the profile was installed)
 ./INSTALL wally
 ./INSTALL axiom
 ```
@@ -117,10 +119,10 @@ options:
 ```
 In this case, `<option_name>` should match the name of the Snakemake rule option, and `<slurm_flag>` is the flag used to specify this option with the `sbatch` command. The `{}` will be substituted for the option's value if the value was specified in the Snakemake rule.
 
-In the Snakemake rule, option values can be specified 
+In the Snakemake rule, option values can be specified
 - at the rule level (*e.g.* threads)
 - within the `params` keyword
-- within the `resources` keyword. 
+- within the `resources` keyword.
 
 The profile will first look for the option in `resources`, then `params`, then at the rule level.
 
