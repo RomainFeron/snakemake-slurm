@@ -89,8 +89,8 @@ The profile will check Snakemake's jobscript for all parameters defined in the `
 | Option | Description | Snakemake keyword |
 |---|---|---|
 | threads | Number of CPUs to request at submission | `threads` |
-| memory | Maximum memory to request at submission (**in Mb**) | `resources: mem_mb`<br>`resources: memory`<br>`params: mem_mb`<br>`params: memory`|
-| runtime | Maximum runtime to request at submission (**format: "D-HH:MM:SS" or "\<seconds\>"**) | `params: runtime`|
+| memory | Maximum memory to request at submission (**in Mb**) | **`resources: mem_mb`**<br>`resources: memory`<br>`params: mem_mb`<br>`params: memory`|
+| runtime | Maximum runtime to request at submission (**format: M, M:S, H:M:S, D-H, D-H:M, or D-H:M:S**, see [SLURM doc](https://slurm.schedmd.com/sbatch.html)) | **`resources: runtime`**<br>`params: runtime`|
 | log | Path to log file | `log` |
 | partition | Partition to submit the job to | `params: partition`|
 
@@ -108,7 +108,7 @@ rule example:
     'echo "example" > {output}'
 ```
 
-**Note :** it is advised to specify memory with the `resources` keyword, as it allows Snakemake to resubmit the job with higher memory requirements in case of failure.
+**Note :** it is advised to specify runtime and memory with the `resources` keyword, as it allows Snakemake to resubmit the job with higher memory requirements in case of failure.
 
 You can implement additional parameters by adding an entry to the `options` field of the file `slurm.yaml`, with format:
 ```yaml

@@ -9,31 +9,63 @@ from collections import defaultdict
 from snakemake.utils import read_job_properties
 
 
-def convert_time(time):
+def convert_time(runtime):
     '''
-    Utility function to convert a runtime from format 'D-HH:MM:SS' to seconds
+    Utility function to convert a runtime from SLURM runtime format to seconds.
+    Acceptable time formats for SLURM:
+    - "minutes"
+    - "minutes:seconds"
+    - "hours:minutes:seconds"
+    - "days-hours"
+    - "days-hours:minutes"
+    - "days-hours:minutes:seconds"
     '''
-    if isinstance(time, int):
-        return time
-    elif time.isdigit():
-        return int(time)
+    runtime = str(runtime)
+    d, h, m, s = 0, 0, 0, 0
+    fields = runtime.split('-')
+    parsing_error = False
+    if len(fields) == 2:
+        d = int(fields[0])
+        fields = tuple(int(f) for f in fields[1].split(':'))
+        if len(fields) == 1:
+            h = fields[0]
+        elif len(fields) == 2:
+            h, m = fields
+        elif len(fields)  == 3:
+            h, m, s = fields
+        else:
+            parsing_error = True
+    elif len(fields) == 1:
+        fields = tuple(int(f) for f in fields[0].split(':'))
+        if len(fields) == 1:
+            m = fields[0]
+        elif len(fields) == 2:
+            m, s = fields
+        elif len(fields)  == 3:
+            h, m, s = fields
+        else:
+            parsing_error = True
     else:
-        d, h, m, s = (int(f) for f in re.split(':|-', time))
+        parsing_error = True
+    if parsing_error:
+        logging.error(f'Invalid format for runtime string <{runtime}> (accepted formats: "M", "M:S", "H:M:S", "D-H", "D-H:M", "D-H:M:S"')
+        exit(1)
+    else:
         return ((((d * 24) + h) * 60) + m) * 60 + s
 
 
-def convert_time_slurm(time):
+def convert_time_slurm(runtime):
     '''
     Utility function to convert a runtime from seconds to format 'D-HH:MM:SS'
     '''
     d, h, m, s = (0, 0, 0, 0)
-    s = time % 60
-    time = (time - s) // 60
-    m = time % 60
-    time = (time - m) // 60
-    h = time % 24
-    time = (time - h) // 24
-    d = time
+    s = runtime % 60
+    runtime = (runtime - s) // 60
+    m = runtime % 60
+    runtime = (runtime - m) // 60
+    h = runtime % 24
+    runtime = (runtime - h) // 24
+    d = runtime
     if h < 10:
         h = f'0{h}'
     if m < 10:
