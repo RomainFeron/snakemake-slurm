@@ -138,4 +138,4 @@ blacklist:
 
 ### Adjusting update rate for partition information
 
-By default, the profile will scan for partitions the first time it is ever used by Snakemake and will store data about available partitions in a file `partitions.yaml`. It will then check again and update the information every *N* days (30 days by default). Note that the information is updated only when the profile is used by Snakemake. You can change the partitions data file name as well as the update rate in the `scheduler` field of the file `slurm.yaml`.
+By default, the profile will scan for partitions the first time it is ever used by Snakemake and will store data about available partitions in a file `partitions.yaml`. It will then check again and update the information every *N* days (1 day by default). Note that the information is updated only when the profile is used by Snakemake. You can change the partitions data file name as well as the update rate in the `scheduler` field of the file `slurm.yaml`.
