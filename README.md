@@ -92,7 +92,8 @@ The profile will check Snakemake's jobscript for all parameters defined in the `
 |---|---|---|
 | threads | Number of CPUs to request at submission | `threads` |
 | memory | Maximum memory to request at submission (**in Mb**) | **`resources: mem_mb`**<br>`resources: memory`<br>`params: mem_mb`<br>`params: memory`|
-| runtime | Maximum runtime to request at submission<br>(**format: M, M:S, H:M:S, D-H, D-H:M, or D-H:M:S**, see [SLURM doc](https://slurm.schedmd.com/sbatch.html)) | **`resources: runtime`**<br>`params: runtime`|
+| runtime | Maximum runtime to request at submission<br>(**format: M, M:S, H:M:S, D-H, D-H:M, or D-H:M:S**, see [SLURM doc](https://slurm.schedmd.com/sbatch.html)) | `params: runtime`|
+| runtime_s | Maximum runtime to request at submission (**in seconds**) | **`resources: runtime_s`**<br>`params: runtime_s`|
 | log | Path to log file | `log` |
 | partition | Partition to submit the job to | `params: partition`|
 

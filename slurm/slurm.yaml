@@ -8,6 +8,7 @@ options:
     mem_mb: --mem={}
     log: --output={}.cluster.o --error={}.cluster.e
     runtime: --time={}
+    runtime_s: --time={}
     partition: --partition={}
 
 # Scheduler settings

@@ -205,7 +205,10 @@ class SlurmScheduler:
                     if not os.path.isdir(dir_path):
                         os.makedirs(dir_path)
                 self.submission_settings[setting] = value
-        self.submission_settings['runtime'] = convert_time(self.submission_settings['runtime'])
+        if 'runtime' in self.submission_settings:  # Runtime was specified in slurm format, convert to seconds for comparison
+            self.submission_settings['runtime'] = convert_time(self.submission_settings['runtime'])
+        elif 'runtime_s' in self.submission_settings:  # Runtime was specified in seconds, update runtime value with runtime_s
+            self.submission_settings['runtime'] = int(self.submission_settings['runtime_s'])
 
     def set_partition(self):
         '''
