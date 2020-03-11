@@ -210,7 +210,7 @@ class SlurmScheduler:
         if 'runtime' in self.submission_settings:  # Runtime was specified in slurm format, convert to seconds for comparison
             self.submission_settings['runtime'] = convert_time(self.submission_settings['runtime'])
         elif 'runtime_s' in self.submission_settings:  # Runtime was specified in seconds, update runtime value with runtime_s
-            self.submission_settings['runtime'] = int(self.submission_settings['runtime_s'])
+            self.submission_settings['runtime_s'] = int(self.submission_settings['runtime_s'])
 
     def set_partition(self):
         '''
@@ -246,7 +246,10 @@ class SlurmScheduler:
         '''
         Generate the submission command based on submission settings.
         '''
-        self.submission_settings['runtime'] = convert_time_slurm(self.submission_settings['runtime'])
+        if self.submission_settings['runtime']:
+            self.submission_settings['runtime'] = convert_time_slurm(self.submission_settings['runtime'])
+        if self.submission_settings['runtime_s']:
+            self.submission_settings['runtime_s'] = convert_time_slurm(self.submission_settings['runtime_s'])
         self.command = 'sbatch '
         for setting, arg_string in self.cfg['options'].items():
             if self.submission_settings[setting] is not None:
