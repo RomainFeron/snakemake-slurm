@@ -102,6 +102,8 @@ class SlurmScheduler:
         '''
         cfg_path = os.path.join(os.path.split(os.path.abspath(__file__))[0], cfg_path)
         self.cfg = yaml.safe_load(open(cfg_path))
+        if not self.cfg['blacklist']:
+            self.cfg['blacklist'] = set()
         self.partitions_file = os.path.join(os.path.split(os.path.abspath(__file__))[0], self.cfg['scheduler']['partitions_file'])
 
     def update_partitions_info(self):
