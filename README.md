@@ -45,6 +45,8 @@ By default, the profile will be installed to `~/.config/snakemake/slurm`. You ca
 
 Updating the profile will update the profile's code but not the configuration (yaml) files, so that your configuration is saved. If you installed the profile in a specific directory `<profile_name>`, run the command `./UPDATE <profile_name>` instead.
 
+To update all files (including configuration files) and reset the partitions info file, run `./FULL_UPDATE` (`./FULL_UPDATE <profile_name>`) instead.
+
 
 #### Special notes for UNIL HPC users (wally / axiom)
 
@@ -140,3 +142,11 @@ blacklist:
 ### Adjusting update rate for partition information
 
 By default, the profile will scan for partitions the first time it is ever used by Snakemake and will store data about available partitions in a file `partitions.yaml`. It will then check again and update the information every *N* days (1 day by default). Note that the information is updated only when the profile is used by Snakemake. You can change the partitions data file name as well as the update rate in the `scheduler` field of the file `slurm.yaml`.
+
+## Troubleshooting
+
+### Job gets stuck in PD state
+
+You can get information on why the job is stuck from the 'REASON' field in the output of `squeue -u <username>`.
+
+In some cases, partition permissions are not configured properly and snakemake-slurm will try to submit jobs to a partition that is not available for you. There is no official reason code for this, but it may contain the word 'Permission' somewhere. In this case, check which partition the job was submitted to with `scontrol show job <job_id>` and add this partition to the [blacklist](#blacklisting-partitions).
