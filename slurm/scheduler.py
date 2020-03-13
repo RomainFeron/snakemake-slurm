@@ -31,7 +31,7 @@ def convert_time(runtime):
             h = fields[0]
         elif len(fields) == 2:
             h, m = fields
-        elif len(fields)  == 3:
+        elif len(fields) == 3:
             h, m, s = fields
         else:
             parsing_error = True
@@ -41,7 +41,7 @@ def convert_time(runtime):
             m = fields[0]
         elif len(fields) == 2:
             m, s = fields
-        elif len(fields)  == 3:
+        elif len(fields) == 3:
             h, m, s = fields
         else:
             parsing_error = True
@@ -131,7 +131,7 @@ class SlurmScheduler:
         # The response is parsed to create a list in which each element is a list of values for a partition's node configuration,
         # with the first element being field names given by the header
         sinfo_response = output('sinfo --noconvert -eO "partitionname,cpus,memory,time,maxcpuspernode,groups,available,prioritytier"')
-        info = [[field for field in partition[:-1].split(' ') if field != ''] for 
+        info = [[field for field in partition[:-1].split(' ') if field != ''] for
                 partition in sinfo_response.split('\n') if partition != '']
         # Converts the list of list into a list of dictionaries, with field names given by the header as keys and settings for
         # the given partition as values.
@@ -232,6 +232,8 @@ class SlurmScheduler:
                 elif self.submission_settings['mem_mb'] and int(self.submission_settings['mem_mb']) > int(data['MEMORY']):
                     suitable = False
                 elif self.submission_settings['runtime'] and self.submission_settings['runtime'] > int(data['TIMELIMIT']):
+                    suitable = False
+                elif self.submission_settings['runtime_s'] and self.submission_settings['runtime'] > int(data['TIMELIMIT']):
                     suitable = False
                 if suitable:
                     self.submission_settings['partition'] = partition
