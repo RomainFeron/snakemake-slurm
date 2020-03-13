@@ -233,7 +233,7 @@ class SlurmScheduler:
                     suitable = False
                 elif self.submission_settings['runtime'] and self.submission_settings['runtime'] > int(data['TIMELIMIT']):
                     suitable = False
-                elif self.submission_settings['runtime_s'] and self.submission_settings['runtime'] > int(data['TIMELIMIT']):
+                elif self.submission_settings['runtime_s'] and self.submission_settings['runtime_s'] > int(data['TIMELIMIT']):
                     suitable = False
                 if suitable:
                     self.submission_settings['partition'] = partition
