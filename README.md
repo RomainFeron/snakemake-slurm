@@ -64,16 +64,14 @@ I then edited the file `slurm.yaml` for each profile to blacklist partitions fro
 
 ```yaml
 blacklist:
-    - ax-normal
-    - ax-long
+    - axiom
 ```
 
 - **Axiom**:
 
 ```yaml
 blacklist:
-    - normal
-    - long
+    - wally
 ```
 
 This way, I can run Snakemake on axiom (if the data is on /scratch/axiom) with `--profile axiom`, and on wally (if the data is on /scratch/wally) with `--profile wally`.
@@ -113,7 +111,7 @@ rule example:
     'echo "example" > {output}'
 ```
 
-**Note :** it is advised to specify runtime and memory with the `resources` keyword, as it allows Snakemake to resubmit the job with higher memory requirements in case of failure.
+**Note :** it is advised to specify runtime and memory with the `resources` keyword using `mem_mb` and `runtime_s`, as it allows Snakemake to resubmit the job with higher memory requirements in case of failure.
 
 You can implement additional parameters by adding an entry to the `options` field of the file `slurm.yaml`, with format:
 ```yaml
