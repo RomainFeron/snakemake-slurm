@@ -82,7 +82,7 @@ This way, I can run Snakemake on axiom (if the data is on /scratch/axiom) with `
 
 ### Using the profile
 
-To run Snakemake with this profile, use the runtime parameter `--profile slurm` (replace `slurm` with `<profile_name>` if you installed the profile under a different name): `snakemake --profile slurm`. For more information on Snakemake profiles, check the [official Snakemake documentation](https://snakemake.readthedocs.io/en/latest/executable.html#profiles).
+To run Snakemake with this profile, use the runtime parameter `--profile slurm` (replace `slurm` with `<profile_name>` if you installed the profile under a different name): `snakemake --profile slurm`. For more information on Snakemake profiles, check the [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/executing/cli.html?#profiles).
 
 ### Specifying parameter values
 
@@ -104,9 +104,9 @@ rule example:
     output: 'example.txt'
     threads: 8
     params:
-        runtime: '4-00:00:00'
+        runtime_s = '4-00:00:00'
     resources:
-        memory: 16000
+        mem_mb = 16000
     shell:
     'echo "example" > {output}'
 ```
