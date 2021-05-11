@@ -79,7 +79,8 @@ def output(cmd):
     '''
     Wrapper around subprocess.check_output that returns the output in utf-8 format
     '''
-    return subprocess.check_output(cmd, shell=True).decode('utf-8')
+    response = subprocess.check_output(cmd, shell=True, encoding='utf-8', stderr=subprocess.STDOUT)
+    return response
 
 
 class SlurmScheduler:
@@ -121,10 +122,6 @@ class SlurmScheduler:
         # The command's response has format "<user>|<account>|<Admin>".
         # The account name is retrieved from the second field
         account = output(f'sacctmgr -Pn show user {username}').split('|')[1].strip()
-        # Retrieve groups
-        # The command's response has format "<user> : <group1> <group2> ... <groupN>"
-        # The response is parsed to create a list of groups
-        groups = [g for g in output(f'groups {username}')[:-1].split(':')[-1].split(' ') if g != '']
         # Retrieve and parse partition information
         # The command's response is a variable space-separated table with a header and a line per partition's
         # node configuration (CPU, memory ...). This means there are usually multiple lines for each unique partition.
