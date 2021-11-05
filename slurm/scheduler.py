@@ -190,10 +190,12 @@ class SlurmScheduler:
 
     def get_submission_settings(self):
         '''
-        For each submission setting defined in the 'slurm.yaml' <options> field, check if a value is specified
-        in the job's properties. First check if setting is defined in 'resources', then in 'params', and then in
-        top-level settings.
+        First load values for global parameters defined in 'slurm.yaml' <global_options> field, then for each submission
+        setting defined in the 'slurm.yaml' <options> field, check if a value is specified in the job's properties.
+        First check if setting is defined in 'resources', then in 'params', and then in top-level settings.
         '''
+        for setting, value in self.cfg['global_options'].items():
+            self.submission_settings[setting] = value
         for setting, arg_string in self.cfg['options'].items():
             value = self.check_for_resource(setting)
             if value is None:
