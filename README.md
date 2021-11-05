@@ -18,7 +18,7 @@ To function properly, this profile requires the following python modules:
 - `pyyaml`
 - `snakemake`
 
-Both modules are available in PyPi and can be installed with pip. To install these modules in a user environment (*e.g.* on a cluster), run:
+Both modules are available in Conda and PyPi; if you're using a Conda environment for Snakemake, you shouldn't have to install anything. If not, they can be installed with pip in a user environment (*e.g.* on a cluster) with:
 
 ```bash
 pip install --user pyyaml
@@ -33,66 +33,72 @@ cd snakemake-slurm
 ./INSTALL
 ```
 
-By default, the profile will be installed to `~/.config/snakemake/slurm`. You can specify a different name for the profile by running `./INSTALL <profile_name>`; then, the profile will be installed in `~/.config/snakemake/<profile_name>`.
+By default, the profile will be installed to `~/.config/snakemake/slurm`. You can specify a different name for the profile: 
+
+```bash
+git clone https://github.com/RomainFeron/snakemake-slurm.git
+cd snakemake-slurm
+./INSTALL <profile_name>
+```
+
+In this case, the profile will be installed in `~/.config/snakemake/<profile_name>`.
 
 
 #### Updating the profile
 
+To update the profile's code while retaining configuration file, pull from the `snakemake-slurm` and run the `UPDATE` script:
 ```bash
 # From within the snakemake-slurm directory (not the directory where the profile was installed)
+git pull
 ./UPDATE
 ```
 
-Updating the profile will update the profile's code but not the configuration (yaml) files, so that your configuration is saved. If you installed the profile in a specific directory `<profile_name>`, run the command `./UPDATE <profile_name>` instead.
-
-To update all files (including configuration files) and reset the partitions info file, run `./FULL_UPDATE` (`./FULL_UPDATE <profile_name>`) instead.
-
-
-#### Special notes for UNIL HPC users (wally / axiom)
-
-Since this profile is mainly used by users of the UNIL HPC wally/axiom, I thought I'd share my configuration for this platform. I setup two separate profiles for wally and axiom with the following commands:
-
+If you used a name other than the default `slurm` for the profile, specify the name when running `UPDATE`:
 ```bash
 # From within the snakemake-slurm directory (not the directory where the profile was installed)
-./INSTALL wally
-./INSTALL axiom
+git pull
+./UPDATE <profile_name>
 ```
 
-I then edited the file `slurm.yaml` for each profile to blacklist partitions from the other cluster:
+Updating the profile will update the profile's code but not the configuration (yaml) files, so that your configuration is saved. To update all files (including configuration files) and reset the partitions info file, use the following command:
+```bash
+# From within the snakemake-slurm directory (not the directory where the profile was installed)
+git pull
+./FULL_UPDATE (<profile_name>)
+```
 
-- **Wally**:
+#### Special notes for UNIL HPC users (Curnagl)
+
+Since this profile is mainly used by users of the UNIL HPC Curnagl, I thought I'd share my configuration for this platform. Since we don't need to split jobs between Axiom and Wally anymore, setup is a lot easier; the only important thing for most users is to blacklist two partitions:
 
 ```yaml
+# Partitions to remove from submit list
 blacklist:
-    - axiom
+  - interactive
+  - gpu
 ```
 
-- **Axiom**:
+If you use a GPU for some steps in your workflows, don't blacklist `gpu`.
 
-```yaml
-blacklist:
-    - wally
-```
-
-This way, I can run Snakemake on axiom (if the data is on /scratch/axiom) with `--profile axiom`, and on wally (if the data is on /scratch/wally) with `--profile wally`.
-
-**Note**: you should install Miniconda in your home, which can be accessed from both axiom and wally nodes. It could cause storage problems if you're using a lot of tools but there is no other solution at the moment, except duplicating your Miniconda install on both /scratch/axiom and /scratch/wally.
+**Note**: I recommend to install Conda on `/work` and create an environment dedicated only to Snakemake with Conda. By default Conda is installed in your home (`/users/<username>`) which has pretty low storage and file number quotas.
 
 ## Usage
 
 ### Using the profile
 
-To run Snakemake with this profile, use the runtime parameter `--profile slurm` (replace `slurm` with `<profile_name>` if you installed the profile under a different name): `snakemake --profile slurm`. For more information on Snakemake profiles, check the [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/executing/cli.html?#profiles).
+To run Snakemake with this profile, use the runtime parameter `--profile`: `snakemake --profile slurm` (replace `slurm` with `<profile_name>` if you installed the profile under a different name). For more information on Snakemake profiles, check the [official Snakemake documentation](https://snakemake.readthedocs.io/en/stable/executing/cli.html?#profiles).
 
 ### Specifying parameter values
 
-The profile will check Snakemake's jobscript for all parameters defined in the `options` field of the file `slurm.yaml`. By default, these parameters are:
+#### Default slurm parameters
+
+The profile will check Snakemake's jobscript for all parameters defined in the `options` field of the file `slurm.yaml` in `~/.config/snakemake/<profile_name>`. By default, these parameters are:
 
 | Option | Description | Snakemake keyword |
 |---|---|---|
 | threads | Number of CPUs to request at submission | `threads` |
 | memory | Maximum memory to request at submission (**in Mb**) | **`resources: mem_mb`**<br>`resources: memory`<br>`params: mem_mb`<br>`params: memory`|
-| runtime | Maximum runtime to request at submission<br>(**format: M, M:S, H:M:S, D-H, D-H:M, or D-H:M:S**, see [SLURM doc](https://slurm.schedmd.com/sbatch.html)) | `params: runtime`|
+| runtime | Maximum runtime to request at submission<br>(**format: M, M:S, H:M:S, D-H, D-H:M, or D-H:M:S**, see [SLURM doc](https://slurm.schedmd.com/sbatch.html#OPT_time) | `params: runtime`|
 | runtime_s | Maximum runtime to request at submission (**in seconds**) | **`resources: runtime_s`**<br>`params: runtime_s`|
 | log | Path to log file | `log` |
 | partition | Partition to submit the job to | `params: partition`|
@@ -103,25 +109,63 @@ For instance a rule requiring 8 threads, 4 days runtime, and 16 Gb of memory wil
 rule example:
     output: 'example.txt'
     threads: 8
-    params:
-        runtime_s = '4-00:00:00'
+    resources:
+        mem_mb = 16000,
+        runtime_s = 345600  # 4 days = 345600 seconds
+    shell:
+    'echo "example" > {output}'
+```
+
+Another example specifying runtime in format D-HH:MM:SS and using the `long` partition:
+
+```python
+rule example:
+    output: 'example.txt'
+    threads: 8
     resources:
         mem_mb = 16000
+    params:
+        runtime = '4-00:00:00',
+        partition = 'long'
     shell:
     'echo "example" > {output}'
 ```
 
 **Note :** it is advised to specify runtime and memory with the `resources` keyword using `mem_mb` and `runtime_s`, as it allows Snakemake to resubmit the job with higher memory requirements in case of failure.
 
+#### Implementing custom slurm parameters
+
 You can implement additional parameters by adding an entry to the `options` field of the file `slurm.yaml`, with format:
+
 ```yaml
 options:
     <option_name>: <slurm flag>={}
 ```
+
 In this case, `<option_name>` should match the name of the Snakemake rule option, and `<slurm_flag>` is the flag used to specify this option with the `sbatch` command. The `{}` will be substituted for the option's value if the value was specified in the Snakemake rule.
 
+Below is an example implementing the `--mail-type` slurm flag using a parameter `mail` in Snakemake:
+
+**slurm.yaml:**
+
+```yaml
+options:
+    mail: --mail-type={}
+```
+
+**Snakefile:**
+
+```python
+rule example:
+    output: 'example.txt'
+    params:
+        mail: 'END'
+    shell:
+    'echo "example" > {output}'
+```
+
 In the Snakemake rule, option values can be specified
-- at the rule level (*e.g.* threads)
+- at the rule level (*e.g.* `threads`)
 - within the `params` keyword
 - within the `resources` keyword.
 
