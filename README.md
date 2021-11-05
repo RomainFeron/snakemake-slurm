@@ -135,7 +135,7 @@ rule example:
 
 #### Implementing custom slurm parameters
 
-You can implement additional parameters by adding an entry to the `options` field of the file `slurm.yaml`, with format:
+You can implement additional parameters by adding an entry to the `options` field of the file `slurm.yaml` in `~/.config/snakemake/<profile_name>`, with format:
 
 ```yaml
 options:
@@ -170,6 +170,18 @@ In the Snakemake rule, option values can be specified
 - within the `resources` keyword.
 
 The profile will first look for the option in `resources`, then `params`, then at the rule level.
+
+#### Specifying global slurm parameters
+
+You can specify a value for a `sbatch` parameter by adding it to the `global_options` field of `slurm.yaml` in `~/.config/snakemake/<profile_name>`. The specified value will be used for all jobs submitted with this profile.
+
+Below is an example of configuration so that an email is sent after each job ends:
+
+```yaml
+global_options:
+    mail-type: 'AFTER'
+    mail-user: 'user@domain.com'
+```
 
 ### Blacklisting partitions
 
