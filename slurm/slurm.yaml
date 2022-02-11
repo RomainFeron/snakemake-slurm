@@ -11,6 +11,12 @@ options:
     runtime_s: --time={}
     partition: --partition={}
 
+# Define values for slurm parameters to use with all jobs
+# Syntax is <slurm_parameter>: value
+# Example for '--mail-type: BEFORE':
+# mail-type: 'BEFORE'
+global_options:
+
 # Scheduler settings
 scheduler:
     partitions_file: 'partitions.yaml'  # File where partition information will be stored
