@@ -193,9 +193,13 @@ class SlurmScheduler:
         '''
         if 'global_options' not in self.cfg:
             self.cfg['global_options'] = {}
+        elif self.cfg['global_options'] is None:
+            self.cfg['global_options'] = {}
         for setting, value in self.cfg['global_options'].items():
             self.submission_settings[setting] = value
         if 'options' not in self.cfg:
+            self.cfg['options'] = {}
+        elif self.cfg['options'] is None:
             self.cfg['options'] = {}
         for setting, arg_string in self.cfg['options'].items():
             value = self.check_for_resource(setting)
