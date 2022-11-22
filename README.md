@@ -99,7 +99,6 @@ The profile will check Snakemake's jobscript for all parameters defined in the `
 | threads | Number of CPUs to request at submission | `threads` |
 | memory | Maximum memory to request at submission (**in Mb**) | **`resources: mem_mb`**<br>`resources: memory`<br>`params: mem_mb`<br>`params: memory`|
 | runtime | Maximum runtime to request at submission<br>(**format: M, M:S, H:M:S, D-H, D-H:M, or D-H:M:S**, see [SLURM doc](https://slurm.schedmd.com/sbatch.html#OPT_time) | `params: runtime`|
-| runtime_s | Maximum runtime to request at submission (**in seconds**) | **`resources: runtime_s`**<br>`params: runtime_s`|
 | log | Path to log file | `log` |
 | partition | Partition to submit the job to | `params: partition`|
 
@@ -111,7 +110,7 @@ rule example:
     threads: 8
     resources:
         mem_mb = 16000,
-        runtime_s = 345600  # 4 days = 345600 seconds
+        runtime = 5760  # 4 days = 5760 seconds
     shell:
     'echo "example" > {output}'
 ```
@@ -131,7 +130,7 @@ rule example:
     'echo "example" > {output}'
 ```
 
-**Note :** it is advised to specify runtime and memory with the `resources` keyword using `mem_mb` and `runtime_s`, as it allows Snakemake to resubmit the job with higher memory requirements in case of failure.
+**Note : it is advised to specify runtime in minutes and memory in Mb with the `resources` keyword using `mem_mb` and `runtime`, as they are the standard keywords and units expected by Snakemake. They also allow Snakemake to resubmit the job with higher memory requirements in case of failure (needs to be implemented in the workflow using attempt).**
 
 #### Implementing custom slurm parameters
 

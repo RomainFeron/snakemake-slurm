@@ -77,7 +77,7 @@ def convert_time_slurm(runtime):
 
 def output(cmd):
     '''
-    Wrapper around subprocess.check_output that returns the output in utf-8 format
+    Wrapper around subprocess.check_output that returns utf-8 encoded output
     '''
     response = subprocess.check_output(cmd, shell=True, encoding='utf-8', stderr=subprocess.STDOUT)
     return response
@@ -212,8 +212,6 @@ class SlurmScheduler:
                 self.submission_settings[setting] = value
         if 'runtime' in self.submission_settings:  # Runtime was specified in slurm format, convert to seconds for comparison
             self.submission_settings['runtime'] = convert_time(self.submission_settings['runtime'])
-        elif 'runtime_s' in self.submission_settings:  # Runtime was specified in seconds, update runtime value with runtime_s
-            self.submission_settings['runtime_s'] = int(self.submission_settings['runtime_s'])
 
     def set_partition(self):
         '''
@@ -236,8 +234,6 @@ class SlurmScheduler:
                     suitable = False
                 elif self.submission_settings['runtime'] and self.submission_settings['runtime'] > int(data['TIMELIMIT']):
                     suitable = False
-                elif self.submission_settings['runtime_s'] and self.submission_settings['runtime_s'] > int(data['TIMELIMIT']):
-                    suitable = False
                 if suitable:
                     self.submission_settings['partition'] = partition
                     return
@@ -253,8 +249,6 @@ class SlurmScheduler:
         '''
         if self.submission_settings['runtime']:
             self.submission_settings['runtime'] = convert_time_slurm(self.submission_settings['runtime'])
-        if self.submission_settings['runtime_s']:
-            self.submission_settings['runtime_s'] = convert_time_slurm(self.submission_settings['runtime_s'])
         self.command = 'sbatch '
         for setting, arg_string in self.cfg['options'].items():
             if self.submission_settings[setting] is not None:
